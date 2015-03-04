@@ -1,0 +1,27 @@
+<div class="adventurer-crud split-container">
+    <div class="left">
+        <ul>
+            <li ng-click="selectAdventurer(baseAdventurer)" ng-class="{'selected-adventurer': baseAdventurer === selectedAdventurer}">
+                New
+            </li>
+            <li ng-repeat="adventurer in getAdventurers()" ng-click="selectAdventurer(adventurer)" ng-class="{'selected-adventurer': adventurer === selectedAdventurer}">
+                {{adventurer.name}}
+            </li>
+        </ul>
+    </div>
+    <div class="right">
+        <form ng-submit="save()">
+            <strong>
+                <span ng-if="mode === MODES.CREATE">Create</span>
+                <span ng-if="mode === MODES.UPDATE">Edit</span>
+                Adventurer
+            </strong>
+            <label>Name</label>
+            <input type="text" ng-model="data.name"/>
+            <br/>
+            <button type="button" ng-click="cancel()">Cancel</button>
+            <button type="submit">Save</button>
+        </form>
+    </div>
+    <div class="clear"></div>
+</div>

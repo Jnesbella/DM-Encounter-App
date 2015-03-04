@@ -1,0 +1,33 @@
+<div class="monster-crud split-container">
+    <div class="left">
+        <ul>
+            <li ng-click="selectMonster(baseMonster)" ng-class="{'selected-monster': baseMonster === selectedMonster}">
+                New
+            </li>
+            <li ng-repeat="monster in getMonsters()" ng-click="selectMonster(monster)" ng-class="{'selected-monster': monster === selectedMonster}">
+                {{monster.name}}
+            </li>
+        </ul>
+    </div>
+    <div class="right">
+        <form ng-submit="save()">
+            <strong>
+                <span ng-if="mode === MODES.CREATE">Create</span>
+                <span ng-if="mode === MODES.UPDATE">Edit</span>
+                Monster
+            </strong>
+            <label>Name</label>
+            <input type="text" ng-model="data.name"/>
+            <label>AC</label>
+            <input type="number" ng-model="data.ac"/>
+            <label>HP</label>
+            <input type="number" ng-model="data.hp"/>
+            <label>XP</label>
+            <input type="number" ng-model="data.xp"/>
+            <br/>
+            <button type="button" ng-click="cancel()">Cancel</button>
+            <button type="submit">Save</button>
+        </form>
+    </div>
+    <div class="clear"></div>
+</div>

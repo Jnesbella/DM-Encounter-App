@@ -1,0 +1,147 @@
+<html ng-app="EncountersApp">
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+        <script type="text/javascript" src="js/main.js"></script>
+        <script type="text/javascript" src="js/data-manager.js"></script>
+        <script type="text/javascript" src="js/filters.js"></script>
+        <script type="text/javascript" src="js/encounter.js"></script>
+        <script type="text/javascript" src="js/adventurer-crud.js"></script>
+        <script type="text/javascript" src="js/monster-crud.js"></script>
+        
+        <script type="text/ng-template" id="html/encounter.html">
+            <div class="encounter-container">
+                <div>
+                    <strong>Enemies</strong>
+                    &nbsp;
+                    <button ng-click="addEnemy(encounter)">add enemy</button>
+                    <div ng-repeat="enemy in encounter.enemies">
+                        <select ng-change="configEnemyHp(encounter.enemies[$index].id, encounter.enemies[$index].count)" ng-model="encounter.enemies[$index].id" ng-options="id as enemy.name for (id, enemy) in getEnemies()"></select>
+                        x
+                        <input ng-change="configEnemyHp(encounter.enemies[$index].id, encounter.enemies[$index].count)" type="number" ng-model="encounter.enemies[$index].count"/>
+                        &nbsp;
+                        <button ng-click="removeEnemy($index)">remove enemy</button>
+                    </div>
+                </div>
+                <br/>
+                <div>
+                    <strong>Initiatives</strong>
+                    <div ng-repeat="enemy in encounter.enemies" ng-show="enemy.id">
+                        <span ng-show="enemy.id">{{getEnemies()[enemy.id].name}}</span>
+                        &nbsp;
+                        <strong>{{enemy.initiative}}</strong>
+                    </div>
+                    <div ng-repeat="adventurer in getAdventurers()">
+                        <span>{{adventurer.name}}</span>
+                        &nbsp;
+                        <input type="number" ng-model="encounter.initiatives.adventurers[adventurer.id]"/>
+                    </div>
+                </div>
+                <br/>
+                <div>
+                    <strong>Hit Points</strong>
+                    <div ng-repeat="enemy in encounter.enemies">
+                        <div ng-repeat="e in enemy.count | getRange">
+                            <span>{{getEnemies()[enemy.id].name}}</span>
+                            &nbsp;
+                            <input ng-model="encounter.hp[enemy.id][$index]" type="number"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </script>
+        
+        <script type="text/ng-template" id="html/adventure-crud.html">
+            <div class="adventurer-crud split-container">
+                <div class="left">
+                    <ul>
+                        <li ng-click="selectAdventurer(baseAdventurer)" ng-class="{'selected-adventurer': baseAdventurer === selectedAdventurer}">
+                            New
+                        </li>
+                        <li ng-repeat="adventurer in getAdventurers()" ng-click="selectAdventurer(adventurer)" ng-class="{'selected-adventurer': adventurer === selectedAdventurer}">
+                            {{adventurer.name}}
+                        </li>
+                    </ul>
+                </div>
+                <div class="right">
+                    <form ng-submit="save()">
+                        <strong>
+                            <span ng-if="mode === MODES.CREATE">Create</span>
+                            <span ng-if="mode === MODES.UPDATE">Edit</span>
+                            Adventurer
+                        </strong>
+                        <label>Name</label>
+                        <input type="text" ng-model="data.name"/>
+                        <br/>
+                        <button type="button" ng-click="cancel()">Cancel</button>
+                        <button type="submit">Save</button>
+                    </form>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </script>
+        
+        <script type="text/ng-template" id="html/monster-crud.html">
+            <div class="monster-crud split-container">
+                <div class="left">
+                    <ul>
+                        <li ng-click="selectMonster(baseMonster)" ng-class="{'selected-monster': baseMonster === selectedMonster}">
+                            New
+                        </li>
+                        <li ng-repeat="monster in getMonsters()" ng-click="selectMonster(monster)" ng-class="{'selected-monster': monster === selectedMonster}">
+                            {{monster.name}}
+                        </li>
+                    </ul>
+                </div>
+                <div class="right">
+                    <form ng-submit="save()">
+                        <strong>
+                            <span ng-if="mode === MODES.CREATE">Create</span>
+                            <span ng-if="mode === MODES.UPDATE">Edit</span>
+                            Monster
+                        </strong>
+                        <label>Name</label>
+                        <input type="text" ng-model="data.name"/>
+                        <label>AC</label>
+                        <input type="number" ng-model="data.ac"/>
+                        <label>HP</label>
+                        <input type="number" ng-model="data.hp"/>
+                        <label>XP</label>
+                        <input type="number" ng-model="data.xp"/>
+                        <br/>
+                        <button type="button" ng-click="cancel()">Cancel</button>
+                        <button type="submit">Save</button>
+                    </form>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </script>
+        
+        <link type="text/css" rel="stylesheet" href="css/main.css">
+    </head>
+
+    <body>
+        <div id="monsters" class="crud-container">
+            <h2>Monsters</h2>
+            <monster-crud></monster-crud>
+        </div>
+        
+        <div id="adventurers" class="crud-container">
+            <h2>Adventurers</h2>
+            <adventurer-crud></adventurer-crud>
+        </div>
+        
+        <div id="header">
+            <h1>Session Encounters</h1>
+            <button ng-click="createEncounter()">add encounter</button>
+        </div>
+        
+        <ul id="encounters">
+            <li ng-repeat="encounter in getEncounters()">
+                <h2>Encounter {{$index + 1}}</h2>
+                &nbsp;
+                <button ng-click="removeEncounter(encounter)">remove encounter</button>
+                <encounter ng-model="encounter"></encounter>
+            </li>
+        </ul>
+    </body>
+</html>

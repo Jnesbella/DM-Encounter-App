@@ -1,0 +1,39 @@
+<div class="encounter-container">
+    <div>
+        <strong>Enemies</strong>
+        &nbsp;
+        <button ng-click="addEnemy(encounter)">add enemy</button>
+        <div ng-repeat="enemy in encounter.enemies">
+            <select ng-change="configEnemyHp(encounter.enemies[$index].id, encounter.enemies[$index].count)" ng-model="encounter.enemies[$index].id" ng-options="id as enemy.name for (id, enemy) in getEnemies()"></select>
+            x
+            <input ng-change="configEnemyHp(encounter.enemies[$index].id, encounter.enemies[$index].count)" type="number" ng-model="encounter.enemies[$index].count"/>
+            &nbsp;
+            <button ng-click="removeEnemy($index)">remove enemy</button>
+        </div>
+    </div>
+    <br/>
+    <div>
+        <strong>Initiatives</strong>
+        <div ng-repeat="enemy in encounter.enemies" ng-show="enemy.id">
+            <span ng-show="enemy.id">{{getEnemies()[enemy.id].name}}</span>
+            &nbsp;
+            <strong>{{enemy.initiative}}</strong>
+        </div>
+        <div ng-repeat="adventurer in getAdventurers()">
+            <span>{{adventurer.name}}</span>
+            &nbsp;
+            <input type="number" ng-model="encounter.initiatives.adventurers[adventurer.id]"/>
+        </div>
+    </div>
+    <br/>
+    <div>
+        <strong>Hit Points</strong>
+        <div ng-repeat="enemy in encounter.enemies">
+            <div ng-repeat="e in enemy.count | getRange">
+                <span>{{getEnemies()[enemy.id].name}}</span>
+                &nbsp;
+                <input ng-model="encounter.hp[enemy.id][$index]" type="number"/>
+            </div>
+        </div>
+    </div>
+</div>

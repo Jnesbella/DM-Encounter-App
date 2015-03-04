@@ -1,0 +1,107 @@
+body {
+    margin: 0 auto;
+    padding: 1em;
+    max-width: 900px;
+    font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+}
+
+label {
+    display: block;
+    margin-top: 1em;
+}
+
+button {
+    margin-top: 1em;
+}
+
+#monsters {
+    
+}
+
+#adventurers {
+    
+}
+
+.crud-container {
+    border-left: 3px solid black;
+    margin-bottom: 1em;
+    padding-left: 1em;
+}
+
+.crud-container h2 {
+    display: block;
+    margin: 0;
+    margin-bottom: 0.5em;
+}
+
+#header {
+    margin-bottom: 1em;
+}
+
+h2 {
+    display: inline-block;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.split-container {
+    display: block;
+}
+
+.split-container .left {
+    display: inline-block;
+    width: 50%;
+    float: left;
+}
+
+.split-container .right {
+    display: inline-block;
+    width: 50%;
+    float: right;
+}
+
+.split-container .clear {
+    clear: both;
+}
+
+.adventurer-crud li, .monster-crud li {
+    padding: 0.5em 0.25em;
+    cursor: pointer;
+}
+
+.adventurer-crud li:first-child, .monster-crud li:first-child {
+    font-weight: bold;
+}
+
+.adventurer-crud li:nth-child(even), .monster-crud li:nth-child(even) {
+    background-color: lightgray;
+}
+
+.adventurer-crud li.selected-adventurer, .monster-crud li.selected-monster {
+    background-color: black;
+    color: white;
+}
+
+.adventurer-crud ul, .monster-crud ul {
+    margin-right: 0.5em;
+}
+
+.adventurer-crud form, .monster-crud form {
+    margin: 0;
+    margin-left: 0.5em;
+}
+
+#encounters li {
+    border-top: 1px solid black;
+    padding: 0;
+    margin: 0;
+    padding-bottom: 1em;
+}
+
+#encounters li:last-child {
+    border-bottom: 1px solid black;
+}
