@@ -10,41 +10,82 @@
         
         <script type="text/ng-template" id="html/encounter.html">
             <div class="encounter-container">
-                <div>
-                    <strong>Enemies</strong>
-                    &nbsp;
-                    <button ng-click="addEnemy(encounter)">add enemy</button>
-                    <div ng-repeat="enemy in encounter.enemies">
-                        <select ng-change="configEnemyHp(encounter.enemies[$index].id, encounter.enemies[$index].count)" ng-model="encounter.enemies[$index].id" ng-options="id as enemy.name for (id, enemy) in getEnemies()"></select>
-                        x
-                        <input ng-change="configEnemyHp(encounter.enemies[$index].id, encounter.enemies[$index].count)" type="number" ng-model="encounter.enemies[$index].count"/>
-                        &nbsp;
-                        <button ng-click="removeEnemy($index)">remove enemy</button>
-                    </div>
-                </div>
-                <br/>
-                <div>
-                    <strong>Initiatives</strong>
-                    <div ng-repeat="enemy in encounter.enemies" ng-show="enemy.id">
-                        <span ng-show="enemy.id">{{getEnemies()[enemy.id].name}}</span>
-                        &nbsp;
-                        <strong>{{enemy.initiative}}</strong>
-                    </div>
-                    <div ng-repeat="adventurer in getAdventurers()">
-                        <span>{{adventurer.name}}</span>
-                        &nbsp;
-                        <input type="number" ng-model="encounter.initiatives.adventurers[adventurer.id]"/>
-                    </div>
-                </div>
-                <br/>
-                <div>
-                    <strong>Hit Points</strong>
-                    <div ng-repeat="enemy in encounter.enemies">
-                        <div ng-repeat="e in enemy.count | getRange">
-                            <span>{{getEnemies()[enemy.id].name}}</span>
-                            &nbsp;
-                            <input ng-model="encounter.hp[enemy.id][$index]" type="number"/>
+                <div class="participants-container encounter-section">
+                    <strong class="encounter-heading">Participants</strong>
+                    <button type="button" ng-click="toggleParticipantLock()">{{participantLock ? 'Unlock' : 'Lock'}}</button>
+                    <div class="split-container">
+                        <div class="left">
+                            <span>Party</span>
+                            <div>
+                                <button ng-click="addToParty(TYPES.ADVENTURER)" ng-disabled="participantLock">Add Adventurer</button>
+                                <button ng-click="addToParty(TYPES.MONSTER)" ng-disabled="participantLock">Add Monster</button>
+                            </div>
+                            <div ng-repeat="participant in encounter.participants" ng-if="participant.group === GROUPS.PARTY">
+                                <button ng-click="removeParticipant(participant)" ng-disabled="participantLock">Delete</button>
+                                <span ng-if="participant.type === TYPES.ADVENTURER">
+                                    <select ng-disabled="participantLock" ng-model="encounter.participants[participant.id].refId" ng-options="id as adventurer.name for (id, adventurer) in getAdventurers()"></select>
+                                    <input ng-disabled="participantLock" type="number" title="initiative" ng-model="encounter.participants[participant.id].initiative"/>
+                                </span>
+                                <span ng-if="participant.type === TYPES.MONSTER">
+                                    <select ng-disabled="participantLock" ng-model="encounter.participants[participant.id].refId" ng-options="id as monster.name for (id, monster) in getMonsters()"></select>
+                                    &#215;
+                                    <input ng-disabled="participantLock" type="number" title="count" ng-model="encounter.participants[participant.id].count" ng-change="initCombat(participant)"/>
+                                </span>
+                            </div>
                         </div>
+                        <div class="right">
+                            <span>Enemies</span>
+                            <div>
+                                <button ng-click="addToEnemies(TYPES.ADVENTURER)" ng-disabled="participantLock">Add Adventurer</button>
+                                <button ng-click="addToEnemies(TYPES.MONSTER)" ng-disabled="participantLock">Add Monster</button>
+                            </div>
+                            <div ng-repeat="participant in encounter.participants" ng-if="participant.group === GROUPS.ENEMY">
+                                <button ng-click="removeParticipant(participant)" ng-disabled="participantLock">Delete</button>
+                                <span ng-if="participant.type === TYPES.ADVENTURER">
+                                    <select ng-disabled="participantLock" ng-model="encounter.participants[participant.id].refId" ng-options="id as adventurer.name for (id, adventurer) in getAdventurers()"></select>
+                                    <input ng-disabled="participantLock" type="number" title="initiative" ng-model="encounter.participants[participant.id].initiative"/>
+                                </span>
+                                <span ng-if="participant.type === TYPES.MONSTER">
+                                    <select ng-disabled="participantLock" ng-model="encounter.participants[participant.id].refId" ng-options="id as monster.name for (id, monster) in getMonsters()"></select>
+                                    &#215;
+                                    <input ng-disabled="participantLock" type="number" title="count" ng-model="encounter.participants[participant.id].count" ng-change="initCombat(participant)"/>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+                <br/>
+                <div class="turn-order-container encounter-section">
+                    <strong class="encounter-heading">Turn Order</strong>
+                    <button type="button" ng-click="calculateTurnOrder()" ng-disabled="!participantLock">Calculate Turn Order</button>
+                    <div ng-repeat="(order, participant) in encounter.turnOrder">
+                        <button type="button" ng-click="moveUp(order)" ng-disabled="$first">Up</button>
+                        <button type="button" ng-click="moveDown(order)" ng-disabled="$last">Down</button>
+                        <input type="radio" ng-value="participant.id" ng-model="selectedParticipant" name="participants"/>
+                        <span ng-class="{'party-member': participant.group === GROUPS.PARTY}" ng-if="participant.type === TYPES.ADVENTURER">{{getAdventurers()[participant.refId].name}}</span>
+                        <span ng-class="{'party-member': participant.group === GROUPS.PARTY}" ng-if="participant.type === TYPES.MONSTER">{{getMonsters()[participant.refId].name}}</span>
+                    </div>
+                </div>
+                <br/>
+                <div class="combat-container encounter-section">
+                    <strong class="encounter-heading">Combat</strong>
+                    <div ng-repeat="participant in encounter.participants" ng-if="participant.group === GROUPS.ENEMY && participantLock">
+                        <div ng-if="participant.type === TYPES.MONSTER" ng-repeat="count in participant.count | getRange">
+                            <span>{{getMonsters()[participant.refId].name}}</span>
+                            <input type="text" title="description" ng-model="encounter.combat[participant.id][$index].description" ng-disabled="encounter.combat[participant.id][$index].isDead"/>
+                            <input type="number" title="hp" ng-model="encounter.combat[participant.id][$index].hp" ng-disabled="encounter.combat[participant.id][$index].isDead"/>
+                            <button type="button" ng-click="slay(participant, $index)" ng-disabled="encounter.combat[participant.id][$index].isDead">Slay</button>
+                        </div>
+                        <div ng-if="participant.type === TYPES.ADVENTURER">
+                            <span>{{getAdventurers()[participant.refId].name}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="combat-container encounter-section">
+                    <strong class="encounter-heading">Rewards</strong>
+                    <div>
+                        <span>XP: {{encounter.rewards.xp}}</span>
                     </div>
                 </div>
             </div>
@@ -130,8 +171,14 @@
             <adventurer-crud></adventurer-crud>
         </div>
         
+        <div class="crud-container">
+            <h2>Sessions</h2>
+            <select ng-model="selectedSession" ng-options="id as id for (id, session) in sessions"></select>
+        </div>
+        
         <div id="header">
             <h1>Session Encounters</h1>
+            <input type="text" ng-model="sessionId"/>
             <button ng-click="createEncounter()">add encounter</button>
         </div>
         

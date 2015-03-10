@@ -8,12 +8,12 @@ app.service('dataManager', [function () {
         adventurers: {},
         monsters: {},
         encounters: {},
-        lengths: {
+        lengths: {// the current number of entities
             adventurers: 0,
             monsters: 0,
             encounters: 0
         },
-        counts: {
+        counts: {// only counts up
             adventurers: 0,
             monsters: 0,
             encounters: 0
@@ -50,7 +50,8 @@ app.service('dataManager', [function () {
             name: name,
             ac: ac,
             hp: hp,
-            xp: xp
+            xp: xp,
+            challenge: ''
         };
         
         self.data.monsters[monster.id] = monster;
@@ -74,12 +75,12 @@ app.service('dataManager', [function () {
     self.createEncounter = function () {
         var encounter = {
             id: 'encounter-' + self.data.counts.encounters,
-            enemies: [],
-            initiatives: {
-                enemies: {},
-                adventurers: {}
-            },
-            hp: {}
+            participants: {},
+            turnOrder: {},
+            combat: {},
+            rewards: {
+                xp: 0   
+            }
         };
         
         self.data.encounters[encounter.id] = encounter;

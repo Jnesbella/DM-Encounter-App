@@ -23,9 +23,9 @@ button {
 }
 
 .crud-container {
-    border-left: 3px solid black;
+    border: 1px solid black;
     margin-bottom: 1em;
-    padding-left: 1em;
+    padding: 1em;
 }
 
 .crud-container h2 {
@@ -96,12 +96,30 @@ ul {
 }
 
 #encounters li {
-    border-top: 1px solid black;
-    padding: 0;
     margin: 0;
-    padding-bottom: 1em;
+    margin-bottom: 1em;
+    border: 1px solid black;
+    padding: 1em;
+    padding-top: 0;
 }
 
 #encounters li:last-child {
-    border-bottom: 1px solid black;
+    margin-bottom: 0;
+}
+
+#encounters .encounter-container .encounter-heading {
+    padding: 1em 0;
+    display: inline-block;
+}
+
+#encounters .encounter-container  .encounter-section {
+    border-top: 1px solid black;
+}
+
+#encounters .encounter-container .turn-order-container .party-member {
+    font-weight: 600;
+}
+
+#encounters .encounter-container .combat-container .dead-participant {
+    text-decoration: line-through;
 }
