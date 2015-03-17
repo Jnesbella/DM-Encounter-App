@@ -42,8 +42,8 @@ app.run(['$rootScope', 'dataManager', '$interval', function ($rootScope, dataMan
             var session = $rootScope.sessions[newValue];
             var id = session.id.substring('session-'.length);
             $rootScope.sessionId = id;
-            dataManager.data.lengths = session.length;
-            dataManager.data.counts = session.count;
+            dataManager.data.lengths.encounters = session.length;
+            dataManager.data.counts.encounters = session.count;
             dataManager.data.encounters = session.encounters;
         }
     });

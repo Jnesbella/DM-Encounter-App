@@ -163,15 +163,17 @@
     <body>
         <div id="monsters" class="crud-container">
             <h2>Monsters</h2>
-            <monster-crud></monster-crud>
+            <button ng-click="monstersContainer = !monstersContainer">{{ monstersContainer ? 'Less' : 'More' }}</button>
+            <monster-crud ng-if="monstersContainer"></monster-crud>
         </div>
         
         <div id="adventurers" class="crud-container">
             <h2>Adventurers</h2>
-            <adventurer-crud></adventurer-crud>
+            <button ng-click="adventurersContainer = !adventurersContainer">{{ adventurersContainer ? 'Less' : 'More' }}</button>
+            <adventurer-crud ng-if="adventurersContainer"></adventurer-crud>
         </div>
         
-        <div class="crud-container">
+        <div id="sessions" class="crud-container">
             <h2>Sessions</h2>
             <select ng-model="selectedSession" ng-options="id as id for (id, session) in sessions"></select>
         </div>

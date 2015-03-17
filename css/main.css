@@ -3,6 +3,16 @@ body {
     padding: 1em;
     max-width: 900px;
     font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+    background-color: rgb(234, 234, 234);
+    font-size: 14pt;
+}
+
+#monsters,
+#adventurers,
+#encounters > li,
+#sessions,
+#header {
+    background-color: white;
 }
 
 label {
@@ -10,8 +20,27 @@ label {
     margin-top: 1em;
 }
 
+button, input, select {
+    background: white;
+    color: black;
+    border: 1px solid black;
+    padding: 0.5em 1em;
+    font-size: 10pt;
+}
+
 button {
-    margin-top: 1em;
+    //margin-top: 1em;
+    cursor: pointer;
+    background-color: rgb(234, 234, 234);
+    margin-right: 0.5em;
+}
+
+button:last-of-type {
+    margin-right: 0;
+}
+
+button:hover {
+    text-decoration: underline;
 }
 
 #monsters {
@@ -22,20 +51,60 @@ button {
     
 }
 
+#adventurers > adventurer-crud > .adventurer-crud,
+#monsters > monster-crud > .monster-crud {
+    margin-top: 1em;
+}
+
+#monsters > h2,
+#adventurers > h2 {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#monsters > button,
+#adventurers > button {
+    margin-left: 1em;
+    display: inline-block;
+    vertical-align: middle;
+}
+
 .crud-container {
     border: 1px solid black;
     margin-bottom: 1em;
     padding: 1em;
 }
 
-.crud-container h2 {
+.crud-container > h2 {
     display: block;
     margin: 0;
-    margin-bottom: 0.5em;
+    /*margin-bottom: 0.5em;*/
+}
+
+.crud-container .split-container .left ul {
+    overflow-y: scroll;
+    max-height: 19em;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+#sessions > select {
+    margin-top: 1em;
 }
 
 #header {
     margin-bottom: 1em;
+    padding: 1em;
+    border: 1px solid black;
+}
+
+#header > h1 {
+    margin: 0;
+}
+
+#header > input {
+    margin-top: 1em;
+    margin-right: 1em;
 }
 
 h2 {
@@ -78,7 +147,7 @@ ul {
 }
 
 .adventurer-crud li:nth-child(even), .monster-crud li:nth-child(even) {
-    background-color: lightgray;
+    background-color: rgb(234, 234, 234);;
 }
 
 .adventurer-crud li.selected-adventurer, .monster-crud li.selected-monster {
@@ -93,6 +162,11 @@ ul {
 .adventurer-crud form, .monster-crud form {
     margin: 0;
     margin-left: 0.5em;
+}
+
+.monster-crud .right button,
+.adventurer-crud .right button {
+    margin-top: 1em;
 }
 
 #encounters li {
@@ -122,4 +196,22 @@ ul {
 
 #encounters .encounter-container .combat-container .dead-participant {
     text-decoration: line-through;
+}
+
+encounter .encounter-container .left > div,
+encounter .encounter-container .right > div {
+    margin-top: 1em;
+}
+
+encounter .encounter-container .participants-container > strong,
+encounter .encounter-container .participants-container > button,
+encounter .encounter-container .turn-order-container > strong,
+encounter .encounter-container .turn-order-container > button {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+encounter .encounter-container .participants-container > button,
+encounter .encounter-container .turn-order-container > button {
+    margin-left: 1em;
 }
